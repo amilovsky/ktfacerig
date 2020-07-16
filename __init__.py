@@ -3,7 +3,11 @@ bl_info = {
     "author": "Alexander Milovsky",
     "blender": (2, 80, 0),
     "location": "View3D > UI",
-    "description": "Experimental",
+    "description": "Add-on generates Face bone rig to transfer shape animation "
+                   "into bone-based animation suitable for game-engines."
+                   "Now works only with KeenTools FaceBuilder Head model."
+                   "You can install FaceBuilder addon from "
+                   "https://keentools.io/",
     "wiki_url": "https://keentools.io/",
     "warning": "",
     "category": "Rigging"
