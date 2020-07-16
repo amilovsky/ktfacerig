@@ -24,9 +24,9 @@ class FBRigMainPanel(bpy.types.Panel):
 
         col = layout.column()
         col.scale_y = 0.75
-        col.label(text='1) Select FaceBuilder')
+        col.label(text='1) Select FaceBuilder Head')
         col.label(text='2) Disable Mouth and Eyes')
-        col.label(text='in model settings')
+        col.label(text='in Model settings')
 
         op = layout.operator('keentools_facerig.actor_operator',
                              text='1. Generate Rig')
@@ -52,7 +52,7 @@ class FBRigMainPanel(bpy.types.Panel):
         col = layout.column()
         col.scale_y = 0.75
         col.label(text='1) Select Neutral Animated Mesh')
-        col.label(text='2) then select Target Mesh')
+        col.label(text='2) then select Animated Mesh')
         col.label(text='to define neutral shape')
         op = layout.operator('keentools_facerig.actor_operator',
                              text='3. Neutral mesh')
@@ -71,7 +71,7 @@ class FBRigMainPanel(bpy.types.Panel):
         col = layout.column()
         col.scale_y = 0.75
         col.label(text='1) Select Animated Mesh')
-        col.label(text='2) then select Rig')
+        col.label(text='2) then select generated FaceRig')
         col.label(text='to bake animation')
         op = layout.operator('keentools_facerig.actor_operator',
                              text='4. Bake Animation')
