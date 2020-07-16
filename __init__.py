@@ -4,7 +4,7 @@ bl_info = {
     "blender": (2, 80, 0),
     "location": "View3D > UI",
     "description": "Unofficial FaceRig & Animation transfer",
-    "wiki_url": "https://keentools.io/",
+    "wiki_url": "https://github.com/amilovsky/ktfacerig",
     "warning": "",
     "category": "Rigging"
 }
