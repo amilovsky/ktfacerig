@@ -56,6 +56,12 @@ class FBRigActor(bpy.types.Operator):
         self.report({'INFO'}, "Action: {0}".format(self.action))
 
         if self.action == 'generate_rig':
+            if obj is None or obj.type != 'MESH':
+                return {'CANCELLED'}
+            print('Vertices', len(obj.data.vertices))
+            if len(obj.data.vertices) != 17250:
+                return {'CANCELLED'}
+
             arm_obj = generate_rig_from_mesh(obj, 'FBRig')
             select_object(arm_obj)
             obj.select_set(state=True)
