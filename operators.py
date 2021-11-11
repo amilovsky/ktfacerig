@@ -18,10 +18,12 @@
 # ##### END GPL LICENSE BLOCK #####
 
 
+import logging
 import bpy
 from .faceutils import generate_rig_from_mesh, bake_animation_to_rig,\
     select_object, set_custom_attribute, has_custom_attribute, \
     get_safe_custom_attribute
+from .faceutils.topology_data import TopologyVersion, version_by_object
 
 
 def find_marked_object(ftype='ARMATURE', fattr='fbmesh'):
@@ -51,6 +53,7 @@ class FBRigActor(bpy.types.Operator):
     num: bpy.props.IntProperty(name="Numeric parameter", default=0)
 
     def execute(self, context):
+        logger = logging.getLogger(__name__)
         scene = context.scene
         obj = context.object
         self.report({'INFO'}, "Action: {0}".format(self.action))
@@ -58,11 +61,13 @@ class FBRigActor(bpy.types.Operator):
         if self.action == 'generate_rig':
             if obj is None or obj.type != 'MESH':
                 return {'CANCELLED'}
-            print('Vertices', len(obj.data.vertices))
-            if len(obj.data.vertices) != 17250:
+            logger.info('Vertices: {}'.format(len(obj.data.vertices)))
+            ver = version_by_object(obj)
+            logger.info('Model version: {}'.format(ver))
+            if ver == TopologyVersion.undefined:
                 return {'CANCELLED'}
 
-            arm_obj = generate_rig_from_mesh(obj, 'FBRig')
+            arm_obj = generate_rig_from_mesh(obj, 'FBRig', ver)
             select_object(arm_obj)
             obj.select_set(state=True)
 

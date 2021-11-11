@@ -69,12 +69,13 @@ class FBRigMainPanel(bpy.types.Panel):
             box = layout.box()
             box.label(text='Related rig: {}'.format(attr))
 
-        col = layout.column()
+        box = layout.box()
+        col = box.column()
         col.scale_y = 0.75
         col.label(text='1) Select Neutral Animated Mesh')
         col.label(text='2) then select Animated Mesh')
         col.label(text='to define neutral shape')
-        op = layout.operator('keentools_facerig.actor_operator',
+        op = box.operator('keentools_facerig.actor_operator',
                              text='3. Neutral mesh')
         op.action = 'animation_neutral'
 
@@ -88,28 +89,30 @@ class FBRigMainPanel(bpy.types.Panel):
             box = layout.box()
             box.label(text='Related anim: {}'.format(attr))
 
-        col = layout.column()
+        box = layout.box()
+        col = box.column()
         col.scale_y = 0.75
         col.label(text='1) Select Animated Mesh')
         col.label(text='2) then select generated FaceRig')
         col.label(text='to bake animation')
-        op = layout.operator('keentools_facerig.actor_operator',
+        op = box.operator('keentools_facerig.actor_operator',
                              text='4. Bake Animation')
         op.action = 'bake_animation'
 
-
-        col = layout.column()
+        box = layout.box()
+        col = box.column()
         col.scale_y = 0.75
         col.label(text='This button clear all')
         col.label(text='other objects from scene')
         col.label(text='before export')
-        op = layout.operator('keentools_facerig.actor_operator',
+        op = box.operator('keentools_facerig.actor_operator',
                              text='5. Clear Scene')
         op.action = 'clear_scene'
 
-        col = layout.column()
+        box = layout.box()
+        col = box.column()
         col.scale_y = 0.75
         col.label(text='Just Export to FBX')
-        op = layout.operator('keentools_facerig.actor_operator',
+        op = box.operator('keentools_facerig.actor_operator',
                              text='6. Export Scene')
         op.action = 'export_scene'
