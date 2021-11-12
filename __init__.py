@@ -19,7 +19,7 @@
 
 
 bl_info = {
-    "name": "KT FaceRig for KeenTools FaceBuilder",
+    "name": "KT FaceRig v.0.2 for KeenTools FaceBuilder",
     "author": "Alexander Milovsky",
     "blender": (2, 80, 0),
     "location": "View3D > UI",
