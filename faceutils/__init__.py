@@ -21,6 +21,10 @@
 import bpy
 import mathutils
 from mathutils import Vector
+from .topology_data import (TopologyVersion,
+                            version_by_object,
+                            get_topology_data,
+                            get_points_data)
 
 
 def create_empty(name, size=0.5, display_type='ARROWS'):  # 'PLAIN_AXES'
@@ -161,55 +165,8 @@ def set_custom_attribute(obj, attr_name, val):
     obj[attr_name] = val
 
 
-def generate_rig_from_mesh(obj, arm_name='FaceBuilderRig'):
-    template_pairs = {'nose': (8863, 14038), 'nose.001': (14038, 13816),
-                      'nose.002': (13816, 13821), 'nose.003': (13821, 6661),
-                      'nose.004': (6661, 5946), 'lip.T.L': (7900, 4704),
-                      'lip.T.L.001': (4704, 5458), 'lip.B.L': (14473, 1461),
-                      'lip.B.L.001': (1461, 5458), 'jaw': (12087, 9902),
-                      'chin': (9902, 7983), 'chin.001': (7983, 13680),
-                      'ear.L': (5235, 12977), 'ear.L.001': (12977, 914),
-                      'ear.L.002': (914, 5717), 'ear.L.003': (5717, 922),
-                      'ear.L.004': (922, 5235), 'ear.R': (5809, 15542),
-                      'ear.R.001': (15542, 2270), 'ear.R.002': (2270, 9404),
-                      'ear.R.003': (9404, 2278), 'ear.R.004': (2278, 5809),
-                      'lip.T.R': (7900, 6723), 'lip.T.R.001': (6723, 14609),
-                      'lip.B.R': (14473, 2837), 'lip.B.R.001': (2837, 14609),
-                      'brow.B.L': (13584, 13461), 'brow.B.L.001': (13461, 7909),
-                      'brow.B.L.002': (7909, 825), 'brow.B.L.003': (825, 7859),
-                      'lid.T.L': (1387, 8116), 'lid.T.L.001': (8116, 570),
-                      'lid.T.L.002': (570, 9878), 'lid.T.L.003': (9878, 6500),
-                      'lid.B.L': (6500, 7138), 'lid.B.L.001': (7138, 13788),
-                      'lid.B.L.002': (13788, 7297), 'lid.B.L.003': (7297, 1387),
-                      'brow.B.R': (14967, 14848), 'brow.B.R.001': (14848, 5091),
-                      'brow.B.R.002': (5091, 2181),
-                      'brow.B.R.003': (2181, 8256), 'lid.T.R': (15178, 1928),
-                      'lid.T.R.001': (1928, 1926), 'lid.T.R.002': (1926, 6577),
-                      'lid.T.R.003': (6577, 2696), 'lid.B.R': (2696, 8773),
-                      'lid.B.R.001': (8773, 15163),
-                      'lid.B.R.002': (15163, 5511),
-                      'lid.B.R.003': (5511, 15178), 'forehead.L': (14024, 6790),
-                      'forehead.L.001': (10669, 13435),
-                      'forehead.L.002': (3121, 13580),
-                      'temple.L': (12573, 8869), 'jaw.L': (8869, 6883),
-                      'jaw.L.001': (6883, 5961), 'chin.L': (5961, 5458),
-                      'cheek.B.L': (5458, 373), 'cheek.B.L.001': (373, 250),
-                      'brow.T.L': (250, 13580), 'brow.T.L.001': (13580, 13435),
-                      'brow.T.L.002': (13435, 6790),
-                      'brow.T.L.003': (6790, 8863), 'forehead.R': (15395, 6418),
-                      'forehead.R.001': (11434, 14827),
-                      'forehead.R.002': (3745, 14963),
-                      'temple.R': (12070, 6443), 'jaw.R': (6443, 9237),
-                      'jaw.R.001': (9237, 9758), 'chin.R': (9758, 14609),
-                      'cheek.B.R': (14609, 1729), 'cheek.B.R.001': (1729, 1606),
-                      'brow.T.R': (1606, 14963), 'brow.T.R.001': (14963, 14827),
-                      'brow.T.R.002': (14827, 6418),
-                      'brow.T.R.003': (6418, 8863), 'cheek.T.L': (250, 13118),
-                      'cheek.T.L.001': (13118, 8631), 'nose.L': (8631, 5773),
-                      'nose.L.001': (5773, 13816), 'cheek.T.R': (1606, 14516),
-                      'cheek.T.R.001': (14516, 5005), 'nose.R': (5005, 6637),
-                      'nose.R.001': (6637, 13816)}
-    internal_bones = {'spine.006': ((16438, 17068), (11136, 12234))}
+def generate_rig_from_mesh(obj, arm_name='FaceBuilderRig', ver=TopologyVersion.v1):
+    template_pairs, internal_bones = get_topology_data(ver)
 
     points = {}
     for name in template_pairs:
@@ -287,60 +244,22 @@ def get_delta_point_locations(current, neutral):
 
 
 def bake_animation_to_rig(animated, arm_obj, neutral_mesh=None):
-    points = {8863: 'point-nose', 14038: 'point-nose.001',
-              13816: 'point-nose.002', 13821: 'point-nose.003',
-              6661: 'point-nose.004', 7900: 'point-lip.T.L',
-              4704: 'point-lip.T.L.001', 14473: 'point-lip.B.L',
-              1461: 'point-lip.B.L.001', 12087: 'point-jaw',
-              9902: 'point-chin', 7983: 'point-chin.001', 5235: 'point-ear.L',
-              12977: 'point-ear.L.001', 914: 'point-ear.L.002',
-              5717: 'point-ear.L.003', 922: 'point-ear.L.004',
-              5809: 'point-ear.R', 15542: 'point-ear.R.001',
-              2270: 'point-ear.R.002', 9404: 'point-ear.R.003',
-              2278: 'point-ear.R.004', 6723: 'point-lip.T.R.001',
-              2837: 'point-lip.B.R.001', 13584: 'point-brow.B.L',
-              13461: 'point-brow.B.L.001', 7909: 'point-brow.B.L.002',
-              825: 'point-brow.B.L.003', 1387: 'point-lid.T.L',
-              8116: 'point-lid.T.L.001', 570: 'point-lid.T.L.002',
-              9878: 'point-lid.T.L.003', 6500: 'point-lid.B.L',
-              7138: 'point-lid.B.L.001', 13788: 'point-lid.B.L.002',
-              7297: 'point-lid.B.L.003', 14967: 'point-brow.B.R',
-              14848: 'point-brow.B.R.001', 5091: 'point-brow.B.R.002',
-              2181: 'point-brow.B.R.003', 15178: 'point-lid.T.R',
-              1928: 'point-lid.T.R.001', 1926: 'point-lid.T.R.002',
-              6577: 'point-lid.T.R.003', 2696: 'point-lid.B.R',
-              8773: 'point-lid.B.R.001', 15163: 'point-lid.B.R.002',
-              5511: 'point-lid.B.R.003', 14024: 'point-forehead.L',
-              10669: 'point-forehead.L.001', 3121: 'point-forehead.L.002',
-              12573: 'point-temple.L', 8869: 'point-jaw.L',
-              6883: 'point-jaw.L.001', 5961: 'point-chin.L',
-              5458: 'point-cheek.B.L', 373: 'point-cheek.B.L.001',
-              250: 'point-brow.T.L', 13580: 'point-brow.T.L.001',
-              13435: 'point-brow.T.L.002', 6790: 'point-brow.T.L.003',
-              15395: 'point-forehead.R', 11434: 'point-forehead.R.001',
-              3745: 'point-forehead.R.002', 12070: 'point-temple.R',
-              6443: 'point-jaw.R', 9237: 'point-jaw.R.001',
-              9758: 'point-chin.R', 14609: 'point-cheek.B.R',
-              1729: 'point-cheek.B.R.001', 1606: 'point-brow.T.R',
-              14963: 'point-brow.T.R.001', 14827: 'point-brow.T.R.002',
-              6418: 'point-brow.T.R.003', 13118: 'point-cheek.T.L.001',
-              8631: 'point-nose.L', 5773: 'point-nose.L.001',
-              14516: 'point-cheek.T.R.001', 5005: 'point-nose.R',
-              6637: 'point-nose.R.001', 5946: 'tip-nose.004',
-              13680: 'tip-chin.001', 7859: 'tip-brow.B.L.003',
-              8256: 'tip-brow.B.R.003'}
+    ver = version_by_object(animated)
+    points = get_points_data(ver)
 
     to_object_mode()
 
     mod = get_object_modifier(animated, 'MESH_SEQUENCE_CACHE')
-    mod.show_viewport = False
+    if mod is not None:
+        mod.show_viewport = False
 
     if neutral_mesh is not None:
         neutral = get_point_locations(neutral_mesh, points)
     else:
         neutral = get_point_locations(animated, points)
 
-    mod.show_viewport = True
+    if mod is not None:
+        mod.show_viewport = True
     current = get_point_locations(animated, points)
     delta = get_delta_point_locations(current, neutral)
     # print(delta)
