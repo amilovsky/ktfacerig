@@ -88,9 +88,7 @@ class FBRigActor(bpy.types.Operator):
                 return {'CANCELLED'}
             if obj1.type != 'ARMATURE' or obj2.type != 'MESH':
                 return {'CANCELLED'}
-            # arm_obj = find_marked_object()
-            # if arm_obj is None:
-            #     return {'CANCELLED'}
+
             set_custom_attribute(obj1, 'fbanimation', obj2.name)
             select_object(obj1)
 
@@ -132,10 +130,6 @@ class FBRigActor(bpy.types.Operator):
     # Operator Panel Draw
     def draw(self, context):
         layout = self.layout
-        scene = context.scene
-        obj = context.object
 
         layout.label(text="Simple text label", icon="INFO")
         layout.label(text="Action: {}".format(self.action))
-        # layout.prop(self, 'action', text="String value")
-        # layout.prop(self, 'num', text="Number")

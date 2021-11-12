@@ -45,8 +45,9 @@ class FBRigMainPanel(bpy.types.Panel):
         col = layout.column()
         col.scale_y = 0.75
         col.label(text='1) Select FaceBuilder Head')
-        col.label(text='2) Disable Mouth and Eyes')
-        col.label(text='in Model settings')
+        col.label(text='2) DISABLE Mouth and Eyes')
+        col.label(text='in FB Model settings')
+        col.label(text='for proper skinning')
 
         op = layout.operator('keentools_facerig.actor_operator',
                              text='1. Generate Rig')
@@ -72,9 +73,11 @@ class FBRigMainPanel(bpy.types.Panel):
         box = layout.box()
         col = box.column()
         col.scale_y = 0.75
-        col.label(text='1) Select Neutral Animated Mesh')
+        col.label(text='1) Select Neutral Mesh')
         col.label(text='2) then select Animated Mesh')
-        col.label(text='to define neutral shape')
+        # col.label(text='to define neutral shape')
+        col.label(text='(this step can be skipped')
+        col.label(text='if animation starts from neutral)')
         op = box.operator('keentools_facerig.actor_operator',
                              text='3. Neutral mesh')
         op.action = 'animation_neutral'
@@ -94,7 +97,7 @@ class FBRigMainPanel(bpy.types.Panel):
         col.scale_y = 0.75
         col.label(text='1) Select Animated Mesh')
         col.label(text='2) then select generated FaceRig')
-        col.label(text='to bake animation')
+        col.label(text='(armature) to bake animation')
         op = box.operator('keentools_facerig.actor_operator',
                              text='4. Bake Animation')
         op.action = 'bake_animation'
@@ -102,7 +105,7 @@ class FBRigMainPanel(bpy.types.Panel):
         box = layout.box()
         col = box.column()
         col.scale_y = 0.75
-        col.label(text='This button clear all')
+        col.label(text='This button clears all')
         col.label(text='other objects from scene')
         col.label(text='before export')
         op = box.operator('keentools_facerig.actor_operator',
