@@ -1,4 +1,4 @@
-# KT FaceRig v.0.2
+# KT FaceRig v.0.21
 Unofficial Face Rig add-on for KeenTools FaceBuilder model.
 
 Add-on generates Face bone rig to transfer shape animation 

@@ -26,7 +26,7 @@ class FBRigMainPanel(bpy.types.Panel):
     bl_idname = 'FACEBUILDER_RIG_PT_main_panel'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_label = 'KT FaceRig v.0.2'
+    bl_label = 'KT FaceRig v.0.21'
     # bl_context = 'objectmode'
     bl_category = 'KT FaceRig'
 

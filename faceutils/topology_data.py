@@ -208,4 +208,7 @@ def get_points_data(ver=TopologyVersion.v1):
     elif ver == TopologyVersion.v2:
         template_pairs, _ = _get_topology_data2()
         return _convert_to_points(template_pairs)
+    elif ver == TopologyVersion.v3:
+        template_pairs, _ = _get_topology_data3()
+        return _convert_to_points(template_pairs)
     return {}

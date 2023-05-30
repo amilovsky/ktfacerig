@@ -17,6 +17,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ##### END GPL LICENSE BLOCK #####
 
+import logging
 
 import bpy
 import mathutils
@@ -25,6 +26,13 @@ from .topology_data import (TopologyVersion,
                             version_by_object,
                             get_topology_data,
                             get_points_data)
+
+
+_logger = logging.getLogger(__name__)
+_log = lambda: None
+_log.logger = _logger
+_log.output = _logger.debug
+_log.error = _logger.error
 
 
 def create_empty(name, size=0.5, display_type='ARROWS'):  # 'PLAIN_AXES'
@@ -227,6 +235,7 @@ def generate_rig_from_mesh(obj, arm_name='FaceBuilderRig', ver=TopologyVersion.v
 def get_point_locations(obj, points):
     res = {}
     mesh = get_evaluated_mesh(obj)
+
     if len(mesh.vertices) < len(points):
         return None
     for num in points:
@@ -246,13 +255,16 @@ def get_delta_point_locations(current, neutral):
 def bake_animation_to_rig(animated, arm_obj, neutral_mesh=None):
     ver = version_by_object(animated)
     points = get_points_data(ver)
+    _log.output(f'bake_animation_to_rig points:\n{points}')
 
     to_object_mode()
 
     mod = get_object_modifier(animated, 'MESH_SEQUENCE_CACHE')
+    _log.output(f'mod: {mod}')
     if mod is not None:
         mod.show_viewport = False
 
+    _log.output(f'neutral_mesh: {neutral_mesh}')
     if neutral_mesh is not None:
         neutral = get_point_locations(neutral_mesh, points)
     else:
@@ -262,8 +274,7 @@ def bake_animation_to_rig(animated, arm_obj, neutral_mesh=None):
         mod.show_viewport = True
     current = get_point_locations(animated, points)
     delta = get_delta_point_locations(current, neutral)
-    # print(delta)
-    # print(neutral_mesh)
+    _log.output(f'bake_animation_to_rig delta:\n{delta}')
 
     select_object(arm_obj)
     to_pose_mode()
